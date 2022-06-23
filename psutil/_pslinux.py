@@ -2068,7 +2068,8 @@ class Process(object):
             values = st.split(b' ')
             utime = float(values[11]) / CLOCK_TICKS
             stime = float(values[12]) / CLOCK_TICKS
-            ntuple = _common.pthread(int(thread_id), utime, stime)
+            cnum = int(values[36])
+            ntuple = _common.pthread(int(thread_id), utime, stime, cnum)
             retlist.append(ntuple)
         if hit_enoent:
             self._assert_alive()
