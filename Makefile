@@ -9,7 +9,7 @@ TSCRIPT = psutil/tests/runner.py
 
 # Internal.
 DEPS = \
-	autoflake \
+	git+https://github.com/PyCQA/autoflake.git@refs/pull/107/head \
 	autopep8 \
 	check-manifest \
 	concurrencytest \
@@ -19,7 +19,9 @@ DEPS = \
 	flake8-bugbear \
 	flake8-debugger \
 	flake8-print \
+	flake8-quotes \
 	isort \
+	pep8-naming \
 	pyperf \
 	pypinfo \
 	requests \
@@ -210,13 +212,13 @@ lint-all:  ## Run all linters
 # ===================================================================
 
 fix-flake8:  ## Run autopep8, fix some Python flake8 / pep8 issues.
-	git ls-files | grep \\.py$ | xargs $(PYTHON) -m autopep8 --in-place --jobs 0 --global-config=.flake8
-	git ls-files | grep \\.py$ | xargs $(PYTHON) -m autoflake --in-place --remove-all-unused-imports --remove-unused-variables
+	@git ls-files '*.py' | xargs $(PYTHON) -m autopep8 --in-place --jobs 0 --global-config=.flake8
+	@git ls-files '*.py' | xargs $(PYTHON) -m autoflake --in-place --jobs 0 --remove-all-unused-imports --remove-unused-variables --remove-duplicate-keys
 
 fix-imports:  ## Fix imports with isort.
 	@git ls-files '*.py' | xargs $(PYTHON) -m isort --settings=.isort.cfg
 
-fix-all:
+fix-all:  ## Run all code fixers.
 	${MAKE} fix-flake8
 	${MAKE} fix-imports
 
